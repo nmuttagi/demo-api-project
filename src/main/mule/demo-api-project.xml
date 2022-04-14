@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="42d10b36-614d-4869-9760-4c54fe3c7f34" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<api-gateway:autodiscovery apiId="17759449" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="cb0b35c1-8479-4302-9309-d77944ce258b" flowRef="demo-api-projectFlow" />
+	<flow name="demo-api-projectFlow" doc:id="89334cfb-8d3b-4524-8c92-e2d5adb9a288" >
+		<http:listener doc:name="Listener" doc:id="cb65f458-bb8e-4eb0-b187-d08ea4e541cf" config-ref="HTTP_Listener_config" path="/demoapi"/>
+		<logger level="INFO" doc:name="Logger" doc:id="513d3996-fbc7-4f7b-85b9-d552e871d112" message="First Logger"/>
+		<ee:transform doc:name="Transform Message" doc:id="04d1c740-e2c2-4782-b468-5933751b83ed" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message":"This is api auto discovery project demo"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="86b7e0bb-07e1-4753-8d07-6516bb608cce" message="Second Logger"/>
+	</flow>
+</mule>
